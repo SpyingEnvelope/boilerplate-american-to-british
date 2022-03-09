@@ -113,7 +113,7 @@ module.exports = {
     'redundancy': 'rif',
     'made redundant': "rif'd",
     'terraced house': 'rowhouse',
-    'Heath Robinson device': 'rube goldberg machine',
+    'heath robinson device': 'Rube Goldberg machine',
     'rocket': 'rugola',
     'swede': 'rutabaga',
     'caravan': 'travel trailer',

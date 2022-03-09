@@ -8,11 +8,13 @@ const britishToAmericanTitles = require('./british-to-american-titles.js');
 const americanToBritishRegex = /[0-9][0-9]:[0-9][0-9]/
 const britishToAmericanRegex = /[0-9][0-9]\.[0-9][0-9]/
 const letterRegex = /[a-z]/
+const splitRegex = /\s|(?=\.)|(?=\?)|(?=\,)|(?=\!)/
+const specialRegex = /^\.|\,|\?|\!$/
 
 class Translator {
 
     americanToBritish (text) {
-        let textArr = text.split(" ");
+        let textArr = text.split(splitRegex);
 
         for (let i = 0; i < textArr.length; i++) {
 
@@ -29,6 +31,12 @@ class Translator {
             } else if (americanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()]) {
                 textArr[i] = '<span class="highlight">' + americanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()] + '</span>';
                 textArr.splice(i + 1, 1);
+            } else if (textArr[i].toLowerCase() == 'rube' && textArr[i + 1].toLowerCase() == "goldberg") {
+                textArr[i] = '<span class="highlight">' + americanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase() + ' ' + textArr[i + 2].toLowerCase()] + '</span>';
+                textArr.splice(i + 1, 2);
+            } else if (textArr[i].toLowerCase() == "mr" && textArr[i + 1] == '.' || textArr[i].toLowerCase() == "ms" && textArr[i + 1] == '.' || textArr[i].toLowerCase() == "mrs" && textArr[i + 1] == '.' || textArr[i].toLowerCase() == "mx" && textArr[i + 1] == '.' || textArr[i].toLowerCase() == "dr" && textArr[i + 1] == '.' || textArr[i].toLowerCase() == "prof" && textArr[i + 1] == '.') {
+                textArr[i] = '<span class="highlight">' + americanToBritishTitles[textArr[i].toLowerCase() + textArr[i + 1].toLowerCase()] + '</span>';
+                textArr.splice(i + 1, 1);
             }
         }
 
@@ -39,13 +47,24 @@ class Translator {
             splitStr = splitStr.join("");
             textArr[0] = splitStr;
         }
- 
+        
+        let joinedStr;
 
-        return textArr.join(" ");
+        for (let i = 0; i < textArr.length; i++) {
+            if (i == 0) {
+                joinedStr = textArr[i];
+            } else if (specialRegex.test(textArr[i])) {
+                joinedStr = joinedStr + textArr[i];
+            } else {
+                joinedStr = joinedStr + " " + textArr[i];
+            }
+        }
+
+        return joinedStr;
     }
 
     britishToAmerican (text) {
-        let textArr = text.split(" ");
+        let textArr = text.split(splitRegex);
 
         for (let i = 0; i < textArr.length; i++) {
             if (britishOnly[textArr[i].toLowerCase()]) {
@@ -66,6 +85,9 @@ class Translator {
             } else if (britishToAmericanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()]) {
                 textArr[i] = '<span class="highlight">' + britishToAmericanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()] + '</span>';
                 textArr.splice(i + 1, 1);
+            } else if (textArr[i].toLowerCase() == 'heath' && textArr[i + 1].toLowerCase() == "robinson" && textArr[i + 2].toLowerCase() == 'device') {
+                textArr[i] = '<span class="highlight">' + britishOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase() + ' ' + textArr[i + 2].toLowerCase()] + '</span>';
+                textArr.splice(i + 1, 2);
             }
         }
 
@@ -77,10 +99,21 @@ class Translator {
             textArr[0] = splitStr;
         }
 
+        let joinedStr;
+
+        for (let i = 0; i < textArr.length; i++) {
+            if (i == 0) {
+                joinedStr = textArr[i];
+            } else if (specialRegex.test(textArr[i])) {
+                joinedStr = joinedStr + textArr[i];
+            } else {
+                joinedStr = joinedStr + " " + textArr[i];
+            }
+        }
         
 
 
-        return textArr.join(" ");
+        return joinedStr;
     }
 
 }
