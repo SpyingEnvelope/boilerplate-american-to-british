@@ -15,14 +15,20 @@ class Translator {
         let textArr = text.split(" ");
 
         for (let i = 0; i < textArr.length; i++) {
-            if (americanOnly[textArr[i]]) {
-                textArr[i] = '<span class="highlight">' + americanOnly[textArr[i]] + '</span>';
-            } else if (americanToBritishSpelling[textArr[i]]) {
-                textArr[i] = '<span class="highlight">' + americanToBritishSpelling[textArr[i]] + '</span>';
-            } else if (americanToBritishTitles[textArr[i]]) {
-                textArr[i] = '<span class="highlight">' + americanToBritishTitles[textArr[i]] + '</span>'
+
+            if (americanOnly[textArr[i].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + americanOnly[textArr[i].toLowerCase()] + '</span>';
+            } else if (americanToBritishSpelling[textArr[i].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + americanToBritishSpelling[textArr[i].toLowerCase()] + '</span>';
+            } else if (americanToBritishTitles[textArr[i].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + americanToBritishTitles[textArr[i].toLowerCase()] + '</span>'
             } else if (americanToBritishRegex.test(textArr[i])) {
                 textArr[i] = '<span class="highlight">' + textArr[i][0] + textArr[i][1] + '.' + textArr[i][3] + textArr[i][4] + '</span>';
+            } else if (i == textArr.length - 1) {
+                continue;
+            } else if (americanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + americanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()] + '</span>';
+                textArr.splice(i + 1, 1);
             }
         }
 
@@ -39,21 +45,27 @@ class Translator {
     }
 
     britishToAmerican (text) {
-        let lowerCaseText = text.toLowerCase();
-
-        let textArr = lowerCaseText.split(" ");
+        let textArr = text.split(" ");
 
         for (let i = 0; i < textArr.length; i++) {
-            if (britishOnly[textArr[i]]) {
-                textArr[i] = '<span class="highlight">' + britishOnly[textArr[i]] + '</span>';
-            } else if (britishToAmericanOnly[textArr[i]]) {
-                textArr[i] = '<span class="highlight">' + britishToAmericanOnly[textArr[i]] + '</span>';
-            } else if (britishToAmericanSpelling[textArr[i]]) {
-                textArr[i] = '<span class="highlight">' + britishToAmericanSpelling[textArr[i]] + '</span>';
-            } else if (britishToAmericanTitles[textArr[i]]) {
-                textArr[i] = '<span class="highlight">' + britishToAmericanTitles[textArr[i]] + '</span>';
+            if (britishOnly[textArr[i].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + britishOnly[textArr[i].toLowerCase()] + '</span>';
+            } else if (britishToAmericanOnly[textArr[i].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + britishToAmericanOnly[textArr[i].toLowerCase()] + '</span>';
+            } else if (britishToAmericanSpelling[textArr[i].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + britishToAmericanSpelling[textArr[i].toLowerCase()] + '</span>';
+            } else if (britishToAmericanTitles[textArr[i].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + britishToAmericanTitles[textArr[i].toLowerCase()] + '</span>';
             } else if (britishToAmericanRegex.test(textArr[i])) {
                 textArr[i] = '<span class="highlight">' + textArr[i][0] + textArr[i][1] + ':' + textArr[i][3] + textArr[i][4] + '</span>';
+            } else if (i == textArr.length - 1) {
+                continue;
+            } else if (britishOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + britishOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()] + '</span>';
+                textArr.splice(i + 1, 1);
+            } else if (britishToAmericanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()]) {
+                textArr[i] = '<span class="highlight">' + britishToAmericanOnly[textArr[i].toLowerCase() + ' ' + textArr[i + 1].toLowerCase()] + '</span>';
+                textArr.splice(i + 1, 1);
             }
         }
 
