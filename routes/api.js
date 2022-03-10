@@ -12,7 +12,7 @@ module.exports = function (app) {
       console.log(req.body);
       let translation;
 
-      if (!req.body.locale) {
+      if (!req.body.locale || req.body.text == '') {
         res.json({'error': 'Required field(s) missing'})
       } else if (!req.body.text) {
         res.json({'error': 'No text to translate'})
